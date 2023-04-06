@@ -25,18 +25,24 @@ async function processRPSCheatSheet(path) {
 
   for await (const line of rl) {
     let roundTotal;
-    if ((line[0] == "A" && line[2] == "X") || (line[0] == "B" && line[2] == "Y") || (line[0] == "C" && line[2] == "Z")) {
-      roundTotal = 3 + playValue[line[2]];
+    if (line[2] == "X") {
+      if (line[0] == "A") roundTotal = 3;
+      if (line[0] == "B") roundTotal = 1;
+      if (line[0] == "C") roundTotal = 2;
     }
-    else if ((line[0] == "A" && line[2] == "Y") || (line[0] == "B" && line[2] == "Z") || (line[0] === "C" && line[2] === "X")) {
-      roundTotal = 6 + playValue[line[2]];
+    if (line[2] == "Y") {
+      if (line[0] == "A") roundTotal = 1 + 3;
+      if (line[0] == "B") roundTotal = 2 + 3;
+      if (line[0] == "C") roundTotal = 3 + 3;
     }
-    else {
-      roundTotal = 0 + playValue[line[2]];
+    if (line[2] == "Z") {
+      if (line[0] == "A") roundTotal = 6 + 2;
+      if (line[0] == "B") roundTotal = 6 + 3;
+      if (line[0] == "C") roundTotal = 6 + 1;
     }
     gameTotal = gameTotal + roundTotal;
   }
   console.log(gameTotal);
 }
 
-processCaloriesLine(process.argv[2]);
+processRPSCheatSheet(process.argv[2]);
