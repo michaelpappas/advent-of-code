@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const readline = require('node:readline');
 
 let total = 0;
+
 let letterValue = {
   a: 1,
   b: 2,
@@ -71,21 +72,44 @@ async function processRucksack(path) {
     input: fileStream,
     crlfDelay: Infinity,
   });
-  for await (const line of rl) {
-    let compLength = line.length;
-    let comp1 = line.slice(0, compLength / 2);
-    let comp2 = line.slice(compLength / 2);
-    console.log(comp1, ",", comp2);
+  let compCount = 0;
+  let comp1;
+  let comp2;
+  let comp3;
 
-    for (let char of comp2) {
-      if (comp1.indexOf(char) >= 0) {
-        console.log(char);
-        total = total + letterValue[char];
-        break;
-      }
+  for await (const line of rl) {
+    debugger;
+    if (compCount === 0) {
+      console.log("compCount is 0");
+      comp1 = line;
+      compCount++;
+      continue;
     }
+    else if (compCount === 1) {
+      comp2 = line;
+      compCount++;
+      continue;
+    }
+    else if (compCount === 2) {
+      comp3 = line;
+      compCount = 0;
+      total = total + search(comp1, comp2, comp3);
+      console.log("compCount", compCount);
+      console.log("total", total);
+      continue;
+    }
+
   }
   console.log(total);
+}
+
+function search(input1, input2, input3) {
+  for (let char of input1) {
+    if (input2.indexOf(char) >= 0 && input3.indexOf(char) >= 0) {
+      console.log(char);
+      return letterValue[char];
+    }
+  }
 }
 
 processRucksack(process.argv[2]);
